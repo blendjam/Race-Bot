@@ -1,7 +1,6 @@
-import nodeFetch from "node-fetch";
-import questions from "./questions.js";
+const questions = require("./questions.js");
 
-function startRace(args, message, bot) {
+module.exports = function startRace(args, message, bot) {
   message.reply("\n Race Starting in");
   let countDown = 3;
   let counter = setInterval(() => {
@@ -79,6 +78,4 @@ function startRace(args, message, bot) {
       });
     }
   }, 1000);
-}
-
-export default startRace;
+};

@@ -1,4 +1,4 @@
-export default (args, message) => {
+module.exports = function (args, message) {
   if (args[1]) {
     if (args[1] === "<@!735709626443759620>") {
       message.channel.send("You can't baka me. You are baka :angry:");

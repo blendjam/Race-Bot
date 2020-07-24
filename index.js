@@ -1,7 +1,6 @@
-import displayBoka from "./boka.js";
-import startRace from "./race.js";
-import Discord from "discord.js";
-import Token from "./token.js";
+const displayBoka = require("./boka.js");
+const startRace = require("./race.js");
+const Discord = require("discord.js");
 
 (function () {
   const bot = new Discord.Client();
