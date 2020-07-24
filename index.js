@@ -1,12 +1,12 @@
 import displayBoka from "./boka.js";
 import startRace from "./race.js";
 import Discord from "discord.js";
-import Token from "./token.json";
+import Token from "./token.js";
 
 (function () {
   const bot = new Discord.Client();
 
-  const token = Token.token;
+  const token = process.env.TOKEN;
 
   const PREFIX = "`";
 
