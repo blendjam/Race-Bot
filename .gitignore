@@ -1,7 +1,8 @@
 #Private 
 token.js
 
-#Useless
-node_modules/
-
+#Json files
 package-lock.json
+
+#Useless
+node_modules
