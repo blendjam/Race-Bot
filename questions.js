@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     "text":
       "Genius is one percent inspiration and ninety-nine percent perspiration.",
