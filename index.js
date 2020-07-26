@@ -1,6 +1,7 @@
 const displayBoka = require("./boka.js");
 const startRace = require("./race.js");
 const Discord = require("discord.js");
+const showAvatar = require("./avatar.js");
 
 (function () {
   const bot = new Discord.Client();
@@ -21,13 +22,14 @@ const Discord = require("discord.js");
           displayBoka(args, message);
           break;
         case "avatar":
-          message.channel.send(message.author.avatarURL());
+          showAvatar(message);
           break;
         case "race":
           startRace(args, message, bot);
           break;
         case "gn":
           message.channel.send(`Good Night ${args[1]}`);
+          break;
       }
     }
   });

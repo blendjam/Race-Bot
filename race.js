@@ -1,10 +1,15 @@
 const questions = require("./questions.js");
 
 module.exports = function startRace(args, message, bot) {
-  message.reply("\n Race Starting in");
+  message.channel.send(`${message.author} Race Starting in **3**`);
   let countDown = 3;
   let counter = setInterval(() => {
-    message.channel.send(countDown);
+    message.channel.messages.fetch().then(messages => {
+      messages
+        .first()
+        .edit(`${message.author} Race Starting in **${countDown}**`);
+    });
+
     countDown--;
     if (countDown === 0) {
       clearInterval(counter);
@@ -18,7 +23,7 @@ module.exports = function startRace(args, message, bot) {
         time: 50000,
       });
 
-      let text, accuracy;
+      let text;
 
       collector.on("collect", msg => {
         let count = 0;
@@ -35,45 +40,48 @@ module.exports = function startRace(args, message, bot) {
         const wpm = (questionText.length / (5 * seconds)) * 60;
         let netWpm = wpm - (error / seconds) * 60;
         if (netWpm < 0) netWpm = wpm;
-        const userEmbed = {
-          color: 0x0099ff,
-          title: "Race Results",
-          author: {
-            name: message.author.username,
-            icon_url: message.author.avatarURL(),
-          },
-          description: "Your race results are",
-          fields: [
-            {
-              name: "Time: ",
-              value: seconds,
-              inline: true,
+
+        if (accuracy > 80) {
+          const userEmbed = {
+            color: 0x0099ff,
+            title: "Race Results",
+            author: {
+              name: message.author.username,
+              icon_url: message.author.avatarURL(),
             },
-            {
-              name: "Accuracy",
-              value: `${accuracy.toFixed(3)}%`,
-              inline: true,
-            },
-            {
-              name: "Net WPM: ",
-              value: netWpm.toFixed(3),
-            },
-          ],
-        };
-        message.channel.send({ embed: userEmbed });
-        msg.delete();
-        collector.stop();
-        if (accuracy < 50) {
-          message.reply("NOOB! Practice");
-        } else if (accuracy < 20) {
-          message.reply("Super Duper NOOB! Practice");
+            description: "Your race results are",
+            fields: [
+              {
+                name: "Time: ",
+                value: seconds,
+                inline: true,
+              },
+              {
+                name: "Accuracy",
+                value: `${accuracy.toFixed(3)}%`,
+                inline: true,
+              },
+              {
+                name: "Net WPM: ",
+                value: netWpm.toFixed(3),
+              },
+            ],
+          };
+          message.channel.send({ embed: userEmbed });
+          msg.delete();
+          collector.stop();
+        } else {
+          message.reply(
+            "Your Accuracy was too low **(" +
+              accuracy.toFixed(0) +
+              "%)** . Practice you **NOOB**"
+          );
+          msg.delete();
+          collector.stop();
         }
       });
 
       collector.on("end", collected => {
-        if (accuracy < 40) {
-          message.reply("Accuracy was too low. Practice You NOOB!");
-        }
         if (!text) message.reply("Noob! atleast type something");
       });
     }
