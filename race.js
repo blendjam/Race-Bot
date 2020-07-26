@@ -1,13 +1,13 @@
 const questions = require("./questions.js");
 
 module.exports = function startRace(args, message, bot) {
-  message.channel.send(`${message.author} Race Starting in **3**`);
+  message.channel.send(`${message.author} \n Race Starting in **3**`);
   let countDown = 3;
   let counter = setInterval(() => {
     message.channel.messages.fetch().then(messages => {
       messages
         .first()
-        .edit(`${message.author} Race Starting in **${countDown}**`);
+        .edit(`${message.author} \n Race Starting in **${countDown}**`);
     });
 
     countDown--;
