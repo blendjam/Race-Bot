@@ -1,8 +1,17 @@
 module.exports = function showAvatar(message) {
   if (message.mentions && message.mentions.users.first()) {
-    const avatar = message.mentions.users.first().avatarURL();
-    message.channel.send(avatar);
+    const Embed = {
+      image:{
+        url: message.mentions.users.first().avatarURL()
+      }
+    };
+    message.channel.send({ embed: Embed });
   } else {
-    message.channel.send(message.author.avatarURL());
+    const Embed = {
+     image:{
+        url: message.author.avatarURL();
+      }
+    };
+    message.channel.send({ embed: Embed });
   }
 };
