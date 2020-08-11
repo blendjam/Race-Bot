@@ -2,11 +2,13 @@ const displayBoka = require("./boka.js");
 const startRace = require("./race.js");
 const Discord = require("discord.js");
 const showAvatar = require("./avatar.js");
+const TOKEN = require("./token.js");
 
 (function () {
   const bot = new Discord.Client();
 
-  const token = process.env.TOKEN;
+  // const token = process.env.TOKEN;
+  const token = TOKEN.token;
 
   const PREFIX = "`";
 
@@ -16,6 +18,14 @@ const showAvatar = require("./avatar.js");
 
   bot.on("message", message => {
     let args = message.content.substring(PREFIX.length).split(" ");
+    if (
+      message.author.id === "726037232611491852" &&
+      (message.content.toLowerCase() == "indeed" ||
+        message.content.toLowerCase() == "in-ded" ||
+        message.content.toLowerCase() == "in-deed")
+    ) {
+      message.reply("Indeed you are an Idiot !!! :rofl:");
+    }
     if (message.content.startsWith(PREFIX)) {
       switch (args[0]) {
         case "baka":

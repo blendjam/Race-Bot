@@ -58,7 +58,7 @@ module.exports = function startRace(args, message, bot) {
               },
               {
                 name: "Accuracy",
-                value: `${accuracy.toFixed(3)}%`,
+                value: `${accuracy.toFixed(0)}%`,
                 inline: true,
               },
               {
@@ -74,7 +74,7 @@ module.exports = function startRace(args, message, bot) {
           message.reply(
             "Your Accuracy was too low **(" +
               accuracy.toFixed(0) +
-              "%)** . Practice you **NOOB**"
+              "%)** . Practice you **NOOB**!"
           );
           msg.delete();
           collector.stop();
