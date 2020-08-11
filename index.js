@@ -2,13 +2,13 @@ const displayBoka = require("./boka.js");
 const startRace = require("./race.js");
 const Discord = require("discord.js");
 const showAvatar = require("./avatar.js");
-const TOKEN = require("./token.js");
+//const TOKEN = require("./token.js");
 
 (function () {
   const bot = new Discord.Client();
 
-  // const token = process.env.TOKEN;
-  const token = TOKEN.token;
+  const token = process.env.TOKEN;
+  //const token = TOKEN.token;
 
   const PREFIX = "`";
 
