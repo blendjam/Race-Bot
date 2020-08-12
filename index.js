@@ -23,7 +23,16 @@ const nameList = require("./nameList.js");
 
   bot.on("message", message => {
     let args = message.content.substring(PREFIX.length).split(" ");
-
+   if (
+      message.author.id === "726037232611491852" &&
+      ( message.content.toLowerCase() == "in-ded" ||
+       message.content.startsWith("inde")||
+       message.content.toLowerCase().startsWith("inde")||
+        message.content.toLowerCase() == "in-deed")
+    ) {
+      message.reply("Indeed you are an Idiot !!! :rofl:");
+    }
+    
     if (message.content.startsWith(PREFIX)) {
       switch (args[0]) {
         case "baka":
