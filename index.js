@@ -21,7 +21,7 @@ const showAvatar = require("./avatar.js");
     if (
       message.author.id === "726037232611491852" &&
       ( message.content.toLowerCase() == "in-ded" ||
-       message.content.startsWith("inde")||
+       message.content.toLowerCase().startsWith("inde")||
         message.content.toLowerCase() == "in-deed")
     ) {
       message.reply("Indeed you are an Idiot !!! :rofl:");
