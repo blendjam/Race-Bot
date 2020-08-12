@@ -15,7 +15,7 @@ const nameList = require("./nameList.js");
   const token = process.env.TOKEN;
   // const token = TOKEN.token;
 
-  const PREFIX = "`";
+  const PREFIX = ".";
 
   bot.on("ready", () => {
     console.log("Bot is online!");

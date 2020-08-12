@@ -1,5 +1,5 @@
 module.exports = (arg, words, message, fs) => {
-  let index;
+  let index, array;
   switch (arg) {
     case "add":
       const newText = message.content.substring(5);
@@ -52,10 +52,37 @@ module.exports = (arg, words, message, fs) => {
       message.channel.send(" Your List is ```css\n" + words.names + "```");
       break;
 
-    case "rep":
-      const array = message.content.substring(5).split(",");
+    case "repi":
+      array = message.content.substring(6).split(",");
+      if (!array[1]) return;
       index = array[0].trim() - 1;
+      if (index > words.names.length) {
+        message.channel.send("Index out of bound");
+        return;
+      }
+      if (words.names.includes(array[1].trim())) {
+        message.channel.send("`" + array[1].trim() + "` Already Exists");
+        return;
+      }
+      words.names[index] = array[1].trim();
+      if (writeToFile(words, fs)) {
+        message.channel.send(
+          " Your new List is ```css\n" + words.names + "```"
+        );
+      }
+      break;
 
+    case "rep":
+      array = message.content.substring(5).split(",");
+      if (!array[1]) return;
+
+      const newWord = array[0].trim();
+      if (!words.names.includes(newWord)) {
+        message.channel.send(`\`${newWord}\` doesn't exist in the list`);
+        return;
+      }
+
+      index = words.names.indexOf(newWord);
       if (words.names.includes(array[1].trim())) {
         message.channel.send("`" + array[1].trim() + "` Already Exists");
         return;
