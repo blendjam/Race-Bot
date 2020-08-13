@@ -7,3 +7,6 @@ It's a type racing bot for discord
 ## Prefix:  `
 
 ![Logo](https://i.ibb.co/VvHMq9r/Frame-1-3.png) 
+
+### To Run:
+[![Run on Repl.it](https://repl.it/badge/github/llsanketll/Race-Bot)](https://repl.it/github/llsanketll/Race-Bot)
