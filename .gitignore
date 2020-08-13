@@ -4,6 +4,7 @@ token.js
 #Json Files
 package-lock.json
 scribbleNames.json
+gifs.json
 
 #Node Modules
 node_modules

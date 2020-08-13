@@ -122,7 +122,7 @@ function removeWord(words, givenIndex, message, fs) {
 }
 
 function writeToFile(words, fs) {
-  const newData = JSON.stringify(words);
+  const newData = JSON.stringify(words, null, 2);
   fs.writeFile("./scribbleNames.json", newData, error => {
     if (error) {
       message.channel.send("Faild up update the list");
