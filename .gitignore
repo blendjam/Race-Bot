@@ -1,9 +1,9 @@
-#Private 
+#Private Stuff
 token.js
 
-#Json files
-scribbleNames.json
+#Json Files
 package-lock.json
+scribbleNames.json
 
-#Useless
+#Node Modules
 node_modules
