@@ -1,16 +1,22 @@
 module.exports = function showAvatar(message) {
   if (message.mentions && message.mentions.users.first()) {
     const userEmbed = {
-      image:{
-        url: message.mentions.users.first().avatarURL(),
-      }
+      image: {
+        url: message.mentions.users
+          .first()
+          .displayAvatarURL({ dynamic: true, format: "png", size: 1024 }),
+      },
     };
     message.channel.send({ embed: userEmbed });
   } else {
     const userEmbed = {
-     image:{
-        url: message.author.avatarURL(),
-      }
+      image: {
+        url: message.author.displayAvatarURL({
+          dynamic: true,
+          format: "png",
+          size: 1024,
+        }),
+      },
     };
     message.channel.send({ embed: userEmbed });
   }

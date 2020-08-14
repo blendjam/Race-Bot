@@ -1,36 +1,34 @@
 module.exports = (arg, message, fs) => {
   const words = JSON.parse(fs.readFileSync("./scribbleNames.json"));
-  let index, array;
+  let index, array, wordToRemove;
   switch (arg) {
     case "add":
-      const newText = message.content.substring(5);
+      const text = message.content.slice(5);
+      const newText = text.charAt(0).toUpperCase() + text.slice(1);
       if (!newText) {
         message.channel.send("Please provide a word after ``add` ");
-        break;
-      }
-
-      let count = 0;
-      words.names.forEach(word => {
-        if (word.toLowerCase() == newText.toLowerCase()) {
-          count++;
-          return;
-        }
-      });
-      if (count === 1) {
+      } else if (words.names.includes(newText)) {
         message.channel.send(`${newText} already exists in the list`);
       } else {
         words.names.push(newText);
         if (writeToFile(words, fs)) {
           message.channel.send(`Added the word \`${newText}\``);
-          message.channel.send(" Your List is ```css\n" + words.names + "```");
         }
       }
       break;
 
+    case "rml":
+      index = words.names.length;
+      wordToRemove = words.names[index - 1];
+      if (removeWord(words, index, fs)) {
+        message.channel.send(`Removed \`${wordToRemove}\``);
+      }
+      break;
+
     case "rm":
-      const wordToRemove = message.content.substring(4);
+      wordToRemove = message.content.substring(4);
       index = words.names.indexOf(wordToRemove) + 1;
-      if (removeWord(words, index, message, fs)) {
+      if (removeWord(words, index, fs)) {
         message.channel.send(`Removed \`${wordToRemove}\``);
       } else {
         message.channel.send(
@@ -41,15 +39,15 @@ module.exports = (arg, message, fs) => {
 
     case "rmi":
       index = message.content.substring(5);
-      const removedWord = words.names[index - 1];
-      if (removeWord(words, index, message, fs)) {
-        message.channel.send(`Removed \`${removedWord}\` index(${index}) `);
+      wordToRemove = words.names[index - 1];
+      if (removeWord(words, index, fs)) {
+        message.channel.send(`Removed \`${wordToRemove}\` index(${index}) `);
       } else {
         message.channel.send("Invalid index");
       }
       break;
 
-    case "list":
+    case "ls":
       message.channel.send(" Your List is ```css\n" + words.names + "```");
       break;
 
@@ -65,10 +63,11 @@ module.exports = (arg, message, fs) => {
         message.channel.send("`" + array[1].trim() + "` Already Exists");
         return;
       }
+      const wordToReplace = words.names[index];
       words.names[index] = array[1].trim();
       if (writeToFile(words, fs)) {
         message.channel.send(
-          " Your new List is ```css\n" + words.names + "```"
+          `Replaced \`${wordToReplace}\` with \`${array[1]}\``
         );
       }
       break;
@@ -90,22 +89,21 @@ module.exports = (arg, message, fs) => {
       }
       words.names[index] = array[1].trim();
       if (writeToFile(words, fs)) {
-        message.channel.send(
-          " Your new List is ```css\n" + words.names + "```"
-        );
+        message.channel.send(`Replaced \`${array[0]}\` with \`${array[1]}\``);
       }
       break;
 
-    case "dtlist":
+    case "dls":
       let string = "";
       words.names.forEach((word, i) => {
         string = string + `${word}(${i + 1}), `;
       });
       message.channel.send(" Your List is ```" + string + "```");
+      break;
   }
 };
 
-function removeWord(words, givenIndex, message, fs) {
+function removeWord(words, givenIndex, fs) {
   const index = givenIndex - 1;
   if (words.names[index]) {
     for (let i = index; i <= words.names.length; i++) {
@@ -115,7 +113,6 @@ function removeWord(words, givenIndex, message, fs) {
     }
     words.names.pop();
     if (writeToFile(words, fs)) {
-      message.channel.send(" Your new List is ```css\n" + words.names + "```");
       return true;
     }
   }

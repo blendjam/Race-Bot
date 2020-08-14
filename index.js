@@ -14,7 +14,7 @@ let variables = {
   isAA: false,
 };
 
-const PREFIX = "`";
+const PREFIX = ".";
 const client = new Discord.Client();
 
 const token = TOKEN.token;
@@ -43,13 +43,13 @@ client.on("message", message => {
       case "toggleI":
         if (message.author.id == "539368618006413363") {
           variables.isIndeed = !variables.isIndeed;
-          message.reply(isIndeed);
+          message.reply(variables.isIndeed);
         }
         break;
       case "toggleA":
         if (message.author.id == "539368618006413363") {
           variables.isAA = !variables.isAA;
-          message.reply(isAA);
+          message.reply(variables.isAA);
         }
     }
     if (
@@ -78,5 +78,5 @@ client.on("message", message => {
     }
   }
 });
-client.login(token);
 keepAlive();
+client.login(token);
