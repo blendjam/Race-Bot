@@ -20,8 +20,8 @@ const client = new Discord.Client();
 const token = TOKEN.token;
 
 client.on("ready", () => {
-  gifs = JSON.parse(fs.readFileSync("./gifs.json"));
   console.log("Bot is online!");
+  gifs = JSON.parse(fs.readFileSync("./gifs.json"));
 });
 
 client.on("message", message => {
