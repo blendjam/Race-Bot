@@ -1,4 +1,5 @@
-module.exports = (arg, words, message, fs) => {
+module.exports = (arg, message, fs) => {
+  const words = JSON.parse(fs.readFileSync("./scribbleNames.json"));
   let index, array;
   switch (arg) {
     case "add":

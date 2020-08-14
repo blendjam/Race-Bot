@@ -8,15 +8,18 @@ const TOKEN = require("./token.js");
 const keepAlive = require("./server.js");
 const addBaka = require("./addBaka.js");
 
-let isIndeed, words, gifs;
-const PREFIX = ".";
+let gifs;
+let variables = {
+  isIndeed: false,
+  isAA: false,
+};
+
+const PREFIX = "`";
 const client = new Discord.Client();
 
 const token = TOKEN.token;
 
 client.on("ready", () => {
-  isIndeed = false;
-  words = JSON.parse(fs.readFileSync("./scribbleNames.json"));
   gifs = JSON.parse(fs.readFileSync("./gifs.json"));
   console.log("Bot is online!");
 });
@@ -39,31 +42,37 @@ client.on("message", message => {
         break;
       case "toggleI":
         if (message.author.id == "539368618006413363") {
-          isIndeed = !isIndeed;
+          variables.isIndeed = !variables.isIndeed;
           message.reply(isIndeed);
         }
         break;
+      case "toggleA":
+        if (message.author.id == "539368618006413363") {
+          variables.isAA = !variables.isAA;
+          message.reply(isAA);
+        }
     }
     if (
       message.author.id == "551615059030179861" ||
       message.author.id == "505368807037206558" ||
       message.author.id == "539368618006413363"
     ) {
-      nameList(args[0], words, message, fs);
+      nameList(args[0], message, fs);
     }
   }
-  if (isIndeed && message.author.id == "726037232611491852") {
-    if (message.content.toLowerCase().includes("aaa")) {
+  if (message.author.id == "726037232611491852") {
+    if (variables.isAA && message.content.toLowerCase().includes("aaa")) {
       message.channel.send(
         "https://tenor.com/view/vyx-furry-aaaa-aaaaa-scream-gif-17575013"
       );
     }
     if (
-      message.content.toLowerCase() == "in-ded" ||
-      message.content.startsWith("inde") ||
-      message.content.toLowerCase().startsWith("inde") ||
-      message.content.toLowerCase() == "in-deed" ||
-      message.content.toLowerCase() == "indid"
+      variables.isIndeed &&
+      (message.content.toLowerCase() == "in-ded" ||
+        message.content.startsWith("inde") ||
+        message.content.toLowerCase().startsWith("inde") ||
+        message.content.toLowerCase() == "in-deed" ||
+        message.content.toLowerCase() == "indid")
     ) {
       message.reply("Indeed you are an Idiot !!! :rofl:");
     }
