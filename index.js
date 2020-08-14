@@ -7,14 +7,15 @@ const nameList = require("./nameList.js");
 const TOKEN = require("./token.js");
 const keepAlive = require("./server.js");
 const addBaka = require("./addBaka.js");
+const showHelp = require("./showHelp.js");
 
 let gifs;
 let variables = {
-  isIndeed: false,
-  isAA: false,
+  isIndeed: true,
+  isAA: true,
 };
 
-const PREFIX = ".";
+const PREFIX = "`";
 const client = new Discord.Client();
 
 const token = TOKEN.token;
@@ -36,6 +37,9 @@ client.on("message", message => {
         break;
       case "avatar":
         showAvatar(message);
+        break;
+      case "help":
+        showHelp(args[1], message);
         break;
       case "race":
         startRace(args, message, client);
