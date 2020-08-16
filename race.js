@@ -23,23 +23,20 @@ module.exports = function startRace(args, message, bot) {
         time: 50000,
       });
 
-      let text;
+      let answerWords;
 
       collector.on("collect", msg => {
         let count = 0;
-        let error = 0;
-        text = msg.content;
-        for (let i = 0; i < msg.content.length; i++) {
-          if (!questionText[i]) break;
-          if (msg.content[i] === questionText[i]) count++;
-          else error++;
+				answerWords = msg.content.split(" ");
+				const questionWords = questionText.split(" ");
+        for (let i = 0; i < answerWords.length; i++) {
+          if (!questionWords[i]) break;
+          if (answerWords[i] == questionWords[i]) count++;
         }
-        let accuracy = (count / questionText.length) * 100;
+        let accuracy = (count / questionWords.length) * 100;
         const hrEnd = process.hrtime(hrStart);
-        const seconds = `${hrEnd[0]}.${hrEnd[1].toString().slice(0, 3)}`;
-        const wpm = (questionText.length / (5 * seconds)) * 60;
-        let netWpm = wpm - (error / seconds) * 60;
-        if (netWpm < 0) netWpm = wpm;
+        const seconds = `${hrEnd[0]}.${hrEnd[1].toString().slice(0, 2)}`;
+				const wpm = (count/ seconds) * 60;
 
         if (accuracy > 80) {
           const userEmbed = {
@@ -63,7 +60,7 @@ module.exports = function startRace(args, message, bot) {
               },
               {
                 name: "Net WPM: ",
-                value: netWpm.toFixed(3),
+                value: wpm.toFixed(2),
               },
             ],
           };
@@ -74,7 +71,7 @@ module.exports = function startRace(args, message, bot) {
           message.reply(
             "Your Accuracy was too low **(" +
               accuracy.toFixed(0) +
-              "%)** . Practice you **NOOB**!"
+              "%)**. Must have accuracy higher than 80%"
           );
           msg.delete();
           collector.stop();
@@ -82,7 +79,7 @@ module.exports = function startRace(args, message, bot) {
       });
 
       collector.on("end", collected => {
-        if (!text) message.reply("Noob! atleast type something");
+        if (!answerWords) message.reply("Noob! atleast type something");
       });
     }
   }, 1000);
