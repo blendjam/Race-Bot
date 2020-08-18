@@ -18,10 +18,11 @@ let variables = {
 	isBee: true,
 };
 
-const PREFIX =  process.env.PREFIX;
 const client = new Discord.Client();
 
-const token = process.env.TOKEN; 
+const PREFIX = "`";
+
+const token = process.env.TOKEN;
 
 client.on("ready", () => {
 	console.log("Bot is online!");
@@ -59,20 +60,22 @@ client.on("message", message => {
 			if (
 				message.author.id == "551615059030179861" ||
 				message.author.id == "505368807037206558" ||
-				message.author.id == "539368618006413363"
+				message.author.id == "621977065712910336"
 			) {
 				nameList(args[0], message, fs);
 			}
 		}
-		if(variables.isBee && message.author.id == "667444572632121375"){
-			if(message.content.toLowerCase() == "yes ma'am"){
-				message.channel.send("https://media.giphy.com/media/FTEYw97n2gSty/giphy.gif");
+		if (variables.isBee && message.author.id == "667444572632121375") {
+			if (message.content == "yes ma'am") {
+				message.channel.reply("https://tenor.com/view/hug-virtual-hug-hug-sent-gif-5026057");
 			}
 		}
-		if (variables.isDaWoo && message.author.id == "259442331902541825") {
+		if (variables.isDaWoo && message.author.id == "539368618006413363") {
 			if (message.content.toLowerCase().startsWith("da")) {
 				const person = message.content.split(" ")[1];
-				message.channel.send(`Da \`${person}\` run while you can he's gonna get you`);
+				message.channel.send(
+					`Da ${person} run while you can he's gonna get you`
+				);
 			}
 		}
 		if (message.author.id == "726037232611491852") {
@@ -81,17 +84,8 @@ client.on("message", message => {
 					"https://tenor.com/view/vyx-furry-aaaa-aaaaa-scream-gif-17575013"
 				);
 			}
-			if (
-				variables.isIndeed &&
-				(message.content.toLowerCase() == "in-ded" ||
-					message.content.startsWith("inde") ||
-					message.content.toLowerCase().startsWith("inde") ||
-					message.content.toLowerCase() == "in-deed" ||
-					message.content.toLowerCase() == "indid")
-			) {
-				message.reply("Indeed you are an Idiot !!! :rofl:");
-			}
 		}
+
 	} catch (err) {
 		if (err) console.log(err);
 	}
