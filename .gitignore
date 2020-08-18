@@ -1,10 +1,9 @@
 #Private Stuff
-.env
+config.json
 
 #Json Files
 package-lock.json
-scribbleNames.json
-gifs.json
+json/
 
 #Node Modules
 node_modules/
