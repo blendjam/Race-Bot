@@ -1,4 +1,5 @@
 module.exports = (arg, message, fs) => {
+	const file_dec = fs.openSync("./scribbleNames.json");
   const words = JSON.parse(fs.readFileSync("./scribbleNames.json"));
   let index, array, wordToRemove;
   switch (arg) {
@@ -101,6 +102,9 @@ module.exports = (arg, message, fs) => {
       message.channel.send(" Your List is ```" + string + "```");
       break;
   }
+	fs.close(file_dec, err => {
+		if (err) console.log("Failed Closing");
+	});
 };
 
 function removeWord(words, givenIndex, fs) {

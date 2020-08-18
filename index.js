@@ -4,24 +4,25 @@ const Discord = require("discord.js");
 const showAvatar = require("./avatar.js");
 const fs = require("fs");
 const nameList = require("./nameList.js");
-const TOKEN = require("./token.js");
 const keepAlive = require("./server.js");
 const addBaka = require("./addBaka.js");
 const showHelp = require("./showHelp.js");
 const toggleVariables = require("./toggle.js");
+require("dotenv").config();
 
 let gifs;
 let variables = {
-  isIndeed: false,
-  isAA: false,
-  isDaWoo: false,
-  isBee: false,
+  isIndeed: true,
+  isAA: true,
+  isDaWoo: true,
+  isBee: true,
 };
 
-const PREFIX = ".";
 const client = new Discord.Client();
 
-const token = TOKEN.token;
+const PREFIX = "`";
+
+const token = process.env.TOKEN;
 
 client.on("ready", () => {
   console.log("Bot is online!");
@@ -51,13 +52,25 @@ client.on("message", message => {
         case "toggle":
           variables = toggleVariables(args[1], message, variables);
           break;
+        case "danceboi":
+          message.channel.send(
+            "https://media.giphy.com/media/TfKfqjt2i4GIM/giphy.gif"
+          );
+          break;
       }
       if (
         message.author.id == "551615059030179861" ||
         message.author.id == "505368807037206558" ||
-        message.author.id == "539368618006413363"
+        message.author.id == "621977065712910336"
       ) {
         nameList(args[0], message, fs);
+      }
+    }
+    if (variables.isBee && message.author.id == "667444572632121375") {
+      if (message.content == "yes ma'am") {
+        message.channel.reply(
+          "https://tenor.com/view/hug-virtual-hug-hug-sent-gif-5026057"
+        );
       }
     }
     if (variables.isDaWoo && message.author.id == "539368618006413363") {

@@ -1,5 +1,5 @@
 #Private Stuff
-token.js
+.env
 
 #Json Files
 package-lock.json
@@ -7,4 +7,4 @@ scribbleNames.json
 gifs.json
 
 #Node Modules
-node_modules
+node_modules/
