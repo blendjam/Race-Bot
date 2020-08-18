@@ -26,11 +26,7 @@ function showHelp(arg, message) {
         },
       ],
     };
-    try {
-      message.channel.send({ embed: embedMsg });
-    } catch (err) {
-      console.log(err);
-    }
+    message.channel.send({ embed: embedMsg });
     return;
   }
   switch (arg) {
@@ -80,13 +76,8 @@ function showHelp(arg, message) {
           },
         ],
       };
+      message.channel.send({ embed: embedMsg });
       break;
   }
-  try {
-    message.channel.send({ embed: embedMsg });
-  } catch (err) {
-    console.log(err);
-  }
 }
-
 module.exports = showHelp;
