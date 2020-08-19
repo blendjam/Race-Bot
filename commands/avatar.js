@@ -8,7 +8,7 @@ module.exports = {
         image: {
           url: message.mentions.users
             .first()
-            .displayAvatarURL({ dynamic: true, format: "png", size: 1024 }),
+            .displayAvatarURL({ dynamic: true, size: 1024 }),
         },
       };
       message.channel.send({ embed: userEmbed });
@@ -17,7 +17,6 @@ module.exports = {
         image: {
           url: message.author.displayAvatarURL({
             dynamic: true,
-            format: "png",
             size: 1024,
           }),
         },
