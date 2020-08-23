@@ -1,4 +1,5 @@
 const questions = require("../questions");
+const { draw } = require('./draw.js');
 
 module.exports = {
   name: "race",
@@ -17,10 +18,12 @@ module.exports = {
       countDown--;
       if (countDown === 0) {
         clearInterval(counter);
+        let hrStart;
         const randomIndex = Math.floor(Math.random() * questions.length);
         const questionText = questions[randomIndex].text;
-        message.channel.send("Type this fast !!```" + questionText + "```");
-        const hrStart = process.hrtime();
+        draw(message, questionText).then(() => {
+          hrStart = process.hrtime();
+        });
 
         const filter = m => m.author.id === message.author.id;
         const collector = message.channel.createMessageCollector(filter, {

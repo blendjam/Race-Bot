@@ -15,6 +15,7 @@ commandFiles.forEach(file => {
 	client.commands.set(command.name, command);
 });
 
+
 client.on("ready", async () => {
 	console.log("Bot is online!");
 	client.user.setActivity(" `help", { type: "WATCHING" });
@@ -23,7 +24,6 @@ client.on("ready", async () => {
 client.on("message", message => {
 	let args = message.content.substring(PREFIX.length).split(" ");
 	const command = args[0];
-
 	if (variables.isBee && message.author.id == "667444572632121375") {
 		if (message.content == "yes ma'am") {
 			message.channel.reply(
@@ -31,7 +31,7 @@ client.on("message", message => {
 			);
 		}
 	}
-	
+
 	if (variables.isDaWoo && message.author.id == "259442331902541825") {
 		if (message.content.toLowerCase().startsWith("da")) {
 			const person = message.content.split(" ")[1];
@@ -47,14 +47,10 @@ client.on("message", message => {
 	}
 
 	if (message.content.startsWith(PREFIX)) {
-		if (
-			message.author.id == "551615059030179861" ||
-			message.author.id == "505368807037206558" ||
-			message.author.id == "621977065712910336"
-		) {
+		if (message.member.hasPermission("MANAGE_MESSAGES")) {
 			client.commands.get("Scribble").execute(message, args, fs);
 		}
-		
+
 		if (!client.commands.has(command)) return;
 
 		try {

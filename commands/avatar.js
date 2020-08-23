@@ -4,21 +4,24 @@ module.exports = {
 
   execute(message, args, fs) {
     if (message.mentions && message.mentions.users.first()) {
+      const user = message.mentions.users.first();
+      const img = user.displayAvatarURL({ dynamic: true, format: "png", size: 4096 });
       const userEmbed = {
+        title: "URL",
+        url: img,
         image: {
-          url: message.mentions.users
-            .first()
-            .displayAvatarURL({ dynamic: true, size: 1024 }),
+          url: img
         },
       };
       message.channel.send({ embed: userEmbed });
     } else {
+      const user = message.author
+      const img = user.displayAvatarURL({ dynamic: true, size: 4096, });
       const userEmbed = {
+        title: "URL",
+        url: img,
         image: {
-          url: message.author.displayAvatarURL({
-            dynamic: true,
-            size: 1024,
-          }),
+          url: img
         },
       };
       message.channel.send({ embed: userEmbed });
