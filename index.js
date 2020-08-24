@@ -1,20 +1,49 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const keepAlive = require("./server.js");
-const { TOKEN, PREFIX, variables } = require("./config.json");
+const config = require("./config.json");
+const { TOKEN, PREFIX, variables } = config;
 
 const client = new Discord.Client();
-client.commands = new Discord.Collection();
+client.config = config;
 
-const commandFiles = fs
-	.readdirSync("./commands")
-	.filter(file => file.endsWith(".js"));
+["commands", "aliases"].forEach(x => client[x] = new Discord.Collection());
 
-commandFiles.forEach(file => {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-});
 
+const load = (dir = "./commands") => {
+	fs.readdirSync(dir).forEach(subDir => {
+		const commands = fs.readdirSync(`${dir}\\${subDir}\\`).filter(file => file.endsWith('.js'))
+
+		for (const file of commands) {
+			const pull = require(`${dir}/${subDir}/${file}`);
+			// we check here if the command name or command category is a string or not or check if they exist
+			if (pull.help && typeof (pull.help.name) === "string" && typeof (pull.help.category) === "string") {
+				if (client.commands.get(pull.help.name)) return console.warn(`${warning} Two or more commands have the same name ${pull.help.name}.`);
+				// we add the the comamnd to the collection, Map.prototype.set() for more info
+				client.commands.set(pull.help.name, pull);
+				// we log if the command was loaded.
+				console.log(`Loaded command |${pull.help.name}| ✅`);
+
+			}
+			else {
+				// we check if the command is loaded else throw a error saying there was command it didn't load
+				console.log(`Error loading command in ${dir}/${subDir}/${pull.help.name}. You have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`);
+				// we use continue to load other commands or else it will stop here
+				continue;
+			}
+			// we check if the command has aliases, is so we add it to the collection
+			if (pull.help.aliases && typeof (pull.help.aliases) === "object") {
+				pull.help.aliases.forEach(alias => {
+					// we check if there is a conflict with any other aliases which have same name
+					if (client.aliases.get(alias)) return console.warn(`${warning} Two commands or more commands have the same aliases ${alias}`);
+					client.aliases.set(alias, pull.help.name);
+				});
+			}
+		}
+	});
+}
+
+load();
 
 client.on("ready", async () => {
 	console.log("Bot is online!");
@@ -22,43 +51,35 @@ client.on("ready", async () => {
 });
 
 client.on("message", message => {
+	if (message.author.bot || !message.guild) return;
+
 	let args = message.content.substring(PREFIX.length).split(" ");
-	const command = args[0];
+	const commandName = args[0];
+
+
 	if (variables.isBee && message.author.id == "667444572632121375") {
 		if (message.content == "yes ma'am") {
 			message.channel.reply(
-				"https://tenor.com/view/hug-virtual-hug-hug-sent-gif-5026057"
+				"https://cdn.discordapp.com/attachments/747074718879842334/747080409652920361/B1wRd_XP-.gif"
 			);
 		}
 	}
 
-	if (variables.isDaWoo && message.author.id == "259442331902541825") {
-		if (message.content.toLowerCase().startsWith("da")) {
-			const person = message.content.split(" ")[1];
-			message.channel.send(`Da \`${person}\` run while you can he's gonna get you`);
-		}
-	}
-	if (message.author.id == "726037232611491852") {
-		if (variables.isAA && message.content.toLowerCase().includes("aaa")) {
-			message.channel.send(
-				"https://tenor.com/view/vyx-furry-aaaa-aaaaa-scream-gif-17575013"
-			);
-		}
+	if (!message.content.startsWith(PREFIX)) return;
+
+	if (message.member.hasPermission("MANAGE_MESSAGES")) {
+		client.commands.get("Scribble").execute(message, args, fs);
 	}
 
-	if (message.content.startsWith(PREFIX)) {
-		if (message.member.hasPermission("MANAGE_MESSAGES")) {
-			client.commands.get("Scribble").execute(message, args, fs);
-		}
+	if (!client.commands.has(commandName)) return;
 
-		if (!client.commands.has(command)) return;
+	const command = client.commands.has(commandName) ? client.commands.get(commandName) : client.aliases.get(commandName);
 
-		try {
-			client.commands.get(command).execute(message, args, fs);
-		} catch (err) {
-			console.log(err);
-			message.reply("There was an error executing the command");
-		}
+	try {
+		if (command) command.execute(message, args, client);
+	} catch (err) {
+		console.log(err);
+		message.reply("There was an error executing the command");
 	}
 });
 keepAlive();
