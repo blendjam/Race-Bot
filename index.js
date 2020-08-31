@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const {sep} = require('path');
 const keepAlive = require("./server.js");
 const config = require("./config.json");
 const { TOKEN, PREFIX, variables } = config;
@@ -12,7 +13,7 @@ client.config = config;
 
 const load = (dir = "./commands") => {
 	fs.readdirSync(dir).forEach(subDir => {
-		const commands = fs.readdirSync(`${dir}\\${subDir}\\`).filter(file => file.endsWith('.js'))
+		const commands = fs.readdirSync(`${dir}${sep}${subDir}${sep}`).filter(file => file.endsWith('.js'))
 
 		for (const file of commands) {
 			const pull = require(`${dir}/${subDir}/${file}`);
@@ -22,20 +23,20 @@ const load = (dir = "./commands") => {
 				// we add the the comamnd to the collection, Map.prototype.set() for more info
 				client.commands.set(pull.help.name, pull);
 				// we log if the command was loaded.
-				console.log(`Loaded command |${pull.help.name}| ✅`);
+				console.log(`✅ |${pull.help.name}|`);
 
 			}
 			else {
 				// we check if the command is loaded else throw a error saying there was command it didn't load
-				console.log(`Error loading command in ${dir}/${subDir}/${pull.help.name}. You have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`);
+				console.log(`Error loading command in ${dir}/${subDir}. You have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`);
 				// we use continue to load other commands or else it will stop here
 				continue;
 			}
 			// we check if the command has aliases, is so we add it to the collection
-			if (pull.help.aliases && typeof (pull.help.aliases) === "object") {
+			if (pull.help.aliases) {
 				pull.help.aliases.forEach(alias => {
 					// we check if there is a conflict with any other aliases which have same name
-					if (client.aliases.get(alias)) return console.warn(`${warning} Two commands or more commands have the same aliases ${alias}`);
+					if (client.aliases.get(alias)) return console.warn (`Two commands or more commands have the same aliases ${alias}`);
 					client.aliases.set(alias, pull.help.name);
 				});
 			}
@@ -52,15 +53,15 @@ client.on("ready", async () => {
 
 client.on("message", message => {
 	if (message.author.bot || !message.guild) return;
-
+	message.tts
 	let args = message.content.substring(PREFIX.length).split(" ");
 	const commandName = args[0];
 
 
 	if (variables.isBee && message.author.id == "667444572632121375") {
-		if (message.content == "yes ma'am") {
-			message.channel.reply(
-				"https://cdn.discordapp.com/attachments/747074718879842334/747080409652920361/B1wRd_XP-.gif"
+		if (message.content == "yes ma'am" || message.content == "yessir") {
+			message.channel.send(
+				"https://tenor.com/view/milk-and-mocha-bear-couple-line-hug-cant-breathe-gif-12687187"
 			);
 		}
 	}
@@ -73,7 +74,8 @@ client.on("message", message => {
 
 	if (!client.commands.has(commandName)) return;
 
-	const command = client.commands.has(commandName) ? client.commands.get(commandName) : client.aliases.get(commandName);
+	if (client.commands.has(commandName)) command = client.commands.get(commandName);
+	else if (client.aliases.has(commandName)) command = client.commands.get(client.aliases.get(commandName));
 
 	try {
 		if (command) command.execute(message, args, client);
