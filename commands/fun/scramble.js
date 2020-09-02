@@ -1,7 +1,9 @@
 const scrambleGenerator = require('rubiks-cube-scramble');
+const Draw = require('../../helpers/drawScramble');
 
 module.exports.execute = (message, args, bot) => {
-  message.channel.send(scrambleGenerator.default());
+  Draw.draw(message, scrambleGenerator.default());
+  // message.channel.send(scrambleGenerator.default());
 };
 
 module.exports.help = {

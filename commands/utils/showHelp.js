@@ -7,7 +7,7 @@ module.exports.execute = (message, args, bot) => {
       fields: [],
     }
     bot.commands.forEach(command => {
-      if (command.help.name != "help" && command.help.name != "Scribble")
+      if (command.help.name != "help" && command.help.name != "Scribble" && command.help.name != "dwoo" && command.help.name != "toggle")
         embed.fields.push({ name: command.help.name, value: command.help.description });
     })
     message.channel.send({ embed });
