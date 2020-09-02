@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.0",
     "node-opus": "^0.3.3",
+    "rubiks-cube-scramble": "^1.0.2",
     "ytdl-core": "^3.1.2"
   },
   "devDependencies": {},

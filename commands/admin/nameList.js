@@ -141,5 +141,6 @@ function writeToFile(words, fs) {
 module.exports.help = {
   name: "Scribble",
   category: "admin",
+  aliases: [],
   description: "Name list for skribbl",
 }

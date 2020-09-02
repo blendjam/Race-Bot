@@ -32,10 +32,10 @@ const load = (dir = "./commands") => {
 				continue;
 			}
 			// we check if the command has aliases, is so we add it to the collection
-			if (pull.help.aliases && typeof (pull.help.aliases) === "object") {
+			if (pull.help.aliases) {
 				pull.help.aliases.forEach(alias => {
 					// we check if there is a conflict with any other aliases which have same name
-					if (client.aliases.get(alias)) return console.warn(`${warning} Two commands or more commands have the same aliases ${alias}`);
+					if (client.aliases.get(alias)) return console.warn(`Two commands or more commands have the same aliases ${alias}`);
 					client.aliases.set(alias, pull.help.name);
 				});
 			}
@@ -71,9 +71,13 @@ client.on("message", message => {
 		client.commands.get("Scribble").execute(message, args, fs);
 	}
 
-	if (!client.commands.has(commandName)) return;
+	let command;
 
-	const command = client.commands.has(commandName) ? client.commands.get(commandName) : client.aliases.get(commandName);
+	if (client.commands.has(commandName))
+		command = client.commands.get(commandName);
+	else if (client.aliases.has(commandName))
+		command = client.commands.get(client.aliases.get(commandName));
+	else return;
 
 	try {
 		if (command) command.execute(message, args, client);
